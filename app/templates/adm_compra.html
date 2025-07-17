@@ -1,0 +1,138 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Compra{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6"><h1>Compra</h1></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ url_for('login.catalogo') }}">Home</a></li>
+            <li class="breadcrumb-item active">Compra</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-fluid">
+      <div class="card card-success">
+        <div class="card-body p-0">
+          <header>
+            <div class="logo_cp">
+              <img src="{{ url_for('static', filename='img/logo.png') }}" width="100" height="100">
+            </div>
+            <h1 class="titulo_cp">SOLICITUD DE COMPRA</h1>
+            <div class="datos_cp">
+              <div class="form-group row">
+                <span>Cliente: </span>
+                <div class="input-group-append col-md-6">
+                  <input type="text" class="form-control" id="cliente" placeholder="Ingresa nombre">
+                </div>
+              </div>
+              <div class="form-group row">
+                <span>DNI: </span>
+                <div class="input-group-append col-md-6">
+                  <input type="number" class="form-control" id="dni" placeholder="Ingresa DNI">
+                </div>
+              </div>
+              <div class="form-group row">
+                <span>Vendedor: </span>
+                <h3>{{ nombre }}</h3>
+              </div>
+            </div>
+          </header>
+
+          <button id="actualizar" class="btn btn-success">Actualizar</button>
+
+          <div id="cp" class="card-body p-0">
+            <table class="compra table table-hover text-nowrap">
+              <thead class="table-success">
+                <tr>
+                  <th>Nombre</th><th>Stock</th><th>Precio</th><th>Concentración</th><th>Adicional</th>
+                  <th>Laboratorio</th><th>Presentación</th><th>Cantidad</th><th>Subtotal</th><th>Eliminar</th>
+                </tr>
+              </thead>
+              <tbody id="lista-compra" class="table-active"></tbody>
+            </table>
+
+            <div class="row">
+              <!-- Calculo 1 -->
+              <div class="col-md-4">
+                <div class="card card-default">
+                  <div class="card-header"><h3 class="card-title"><i class="fas fa-dollar-sign"></i> Calculo 1</h3></div>
+                  <div class="card-body">
+                    <div class="info-box mb-3 bg-warning"><span class="info-box-icon"><i class="fas fa-tag"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">SUB TOTAL</span><span id="subtotal">0.00</span></div>
+                    </div>
+                    <div class="info-box mb-3 bg-warning"><span class="info-box-icon"><i class="fas fa-tag"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">IGV</span><span id="con_igv">0.00</span></div>
+                    </div>
+                    <div class="info-box mb-3 bg-info"><span class="info-box-icon"><i class="fas fa-tag"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">SIN DESCUENTO</span><span id="total_sin_descuento">0.00</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Calculo 2 -->
+              <div class="col-md-4">
+                <div class="card card-default">
+                  <div class="card-header"><h3 class="card-title"><i class="fas fa-bullhorn"></i> Calculo 2</h3></div>
+                  <div class="card-body">
+                    <div class="info-box mb-3 bg-danger"><span class="info-box-icon"><i class="fas fa-comment-dollar"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">DESCUENTO</span>
+                        <input id="descuento" type="number" min="0" class="form-control" placeholder="Ingrese descuento">
+                      </div>
+                    </div>
+                    <div class="info-box mb-3 bg-info"><span class="info-box-icon"><i class="ion ion-ios-cart-outline"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">TOTAL</span><span id="total">0.00</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cambio -->
+              <div class="col-md-4">
+                <div class="card card-default">
+                  <div class="card-header"><h3 class="card-title"><i class="fas fa-cash-register"></i> Cambio</h3></div>
+                  <div class="card-body">
+                    <div class="info-box mb-3 bg-success"><span class="info-box-icon"><i class="fas fa-money-bill-alt"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">INGRESO</span>
+                        <input type="number" id="pago" min="1" class="form-control" placeholder="Ingresa Dinero">
+                      </div>
+                    </div>
+                    <div class="info-box mb-3 bg-info"><span class="info-box-icon"><i class="fas fa-money-bill-wave"></i></span>
+                      <div class="info-box-content"><span class="info-box-text">VUELTO</span><span id="vuelto">0.00</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- /.row -->
+
+          </div> <!-- /#cp -->
+
+          <div class="row justify-content-between p-3">
+            <div class="col-md-4 mb-2">
+              <a href="{{ url_for('login.catalogo') }}" class="btn btn-primary btn-block">Seguir comprando</a>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <a href="#" class="btn btn-success btn-block" id="procesar-compra">Realizar compra</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/Catalogo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/Carrito.js') }}"></script>
+{% endblock %}

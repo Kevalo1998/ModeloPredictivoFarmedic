@@ -1,0 +1,150 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Propietario | Editar Datos Personales{% endblock %}
+{% block content %}
+<!-- MODAL: CAMBIAR CONTRASEÑA -->
+<div class="modal fade" id="cambiocontra" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cambiar Contraseña</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="avatar" src="{{ url_for('static', filename='img/avatar.png') }}" class="profile-user-img img-fluid img-circle">
+        <b>{{ session['nombre_us'] }}</b>
+
+        <div class="alert alert-success mt-2" id="update" style="display:none;">
+          <i class="fas fa-check m-1"></i> Se cambió password correctamente
+        </div>
+        <div class="alert alert-danger" id="noupdate" style="display:none;">
+          <i class="fas fa-times m-1"></i> El password no es correcto
+        </div>
+
+        <form id="form-pass">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
+            <input id="oldpass" type="password" class="form-control" placeholder="Ingresar Contraseña Actual" autocomplete="current-password">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-unlock-alt"></i></span></div>
+            <input id="newpass" type="password" class="form-control" placeholder="Ingresar Contraseña Nueva" autocomplete="current-password">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn bg-gradient-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL: CAMBIAR FOTO -->
+<div class="modal fade" id="cambiophoto" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cambiar Avatar</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="avatar" src="{{ url_for('static', filename='img/avatar.png') }}" class="profile-user-img img-fluid img-circle">
+        <b>{{ session['nombre_us'] }}</b>
+
+        <div class="alert alert-success mt-2" id="edit" style="display:none;">
+          <i class="fas fa-check m-1"></i> Se cambió el avatar
+        </div>
+        <div class="alert alert-danger" id="noedit" style="display:none;">
+          <i class="fas fa-times m-1"></i> Formato no aceptado
+        </div>
+
+        <form id="form-photo" enctype="multipart/form-data">
+          <div class="input-group mb-3 ml-5 mt-2">
+            <input type="file" name="photo" class="input-group">
+            <input type="hidden" name="funcion" value="cambiar_foto">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn bg-gradient-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- CONTENIDO PRINCIPAL -->
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6"><h1>Datos Personales</h1></div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ url_for('login.catalogo') }}">Home</a></li>
+            <li class="breadcrumb-item active">Datos Personales</li></ol></div></div></div></section>
+  <section>
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- PERFIL -->
+          <div class="col-md-3">
+            <div class="card card-success card-outline">
+              <div class="card-body box-profile text-center">
+                <img id="avatar" src="{{ url_for('static', filename='img/avatar.png') }}" class="profile-user-img img-fluid img-circle">
+                <button type="button" data-toggle="modal" data-target="#cambiophoto" class="btn btn-primary btn-sm mt-1">Cambiar Avatar
+                </button>
+                <input id="id_usuario" type="hidden" value="{{ session['usuario'] }}">
+                <h3 id="nombre_us" class="profile-username text-success">Nombre</h3>
+                <p id="apellidos_us" class="text-muted">Apellido</p>
+                <ul class="list-group list-group-unbordered mb-3 mt-2">
+                  <li class="list-group-item"><b>Edad</b> <a id="edad" class="float-right">12</a></li>
+                  <li class="list-group-item"><b>DNI</b> <a id="dni_us" class="float-right">12</a></li>
+                  <li class="list-group-item"><b>Tipo de Usuario</b> <span id="us_tipo" class="float-right">Administrador</span></li>
+                </ul>
+                <button data-toggle="modal" data-target="#cambiocontra" class="btn btn-block btn-outline-warning btn-sm">Cambiar Contraseña
+                </button>
+              </div>
+            </div>
+            <div class="card card-success">
+              <div class="card-header"><h3>Sobre Mi</h3></div>
+              <div class="card-body">
+                <p><strong><i class="fas fa-phone mr-1"></i>Teléfono:</strong> <span id="telefono_us" class="text-muted">123456</span></p>
+                <p><strong><i class="fas fa-map-marker-alt mr-1"></i>Residencia:</strong> <span id="residencia_us" class="text-muted">123456
+                </span></p>
+                <p><strong><i class="fas fa-at mr-1"></i>Correo:</strong> <span id="correo_us" class="text-muted">123456</span></p>
+                <p><strong><i class="fas fa-face-smile-wink mr-1"></i>Sexo:</strong> <span id="sexo_us" class="text-muted">123456</span></p>
+                <p><strong><i class="fas fa-pencil-alt mr-1"></i>Información Adicional:</strong> <span id="adicional_us" class="text-muted">123456</span></p>
+                <button class="edit btn btn-block bg-gradient-danger">Editar</button></div>
+              <div class="card-footer"><p class="text-muted">Click para Editar</p></div></div></div>
+          <!-- FORMULARIO DE EDICIÓN -->
+          <div class="col-md-9">
+            <div class="card card-success">
+              <div class="card-header"><h3 class="card-title">Editar datos personales</h3></div>
+              <div class="card-body">
+                <div class="alert alert-success text-center" id="editado" style="display:none;"><i class="fas fa-check m-1"> Editado</i></div>
+                <div class="alert alert-danger text-center" id="noeditado" style="display:none;"><i class="fas fa-times m-1"> Edición deshabilitada</i></div>
+
+                <form id="form-usuario" class="form-horizontal">
+                  {% for campo, tipo in [('telefono', 'number'), ('residencia', 'text'), ('correo', 'text'), ('sexo', 'text')] %}
+                  <div class="form-group row">
+                    <label for="{{ campo }}" class="col-sm-2 col-form-label">{{ campo|capitalize }}</label>
+                    <div class="col-sm-10"><input type="{{ tipo }}" id="{{ campo }}" class="form-control"></div>
+                  </div>
+                  {% endfor %}
+                  <div class="form-group row">
+                    <label for="adicional" class="col-sm-2 col-form-label">Información Adicional</label>
+                    <div class="col-sm-10"><textarea id="adicional" class="form-control" rows="3"></textarea></div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="offset-sm-2 col-sm-10">
+                      <button class="btn btn-block btn-outline-success">Guardar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="card-footer"><p class="text-muted">Cuidado al ingresar mal sus datos</p></div>
+            </div></div></div></div></div></section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/Usuario.js') }}"></script>
+{% endblock %}

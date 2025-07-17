@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts y FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+</head>
+<body>
+    <img class="wave" src="{{ url_for('static', filename='img/wave.png') }}" alt="wave">
+    <div class="contenedor">
+        <div class="img">
+            <img src="{{ url_for('static', filename='img/bg.svg') }}" alt="background">
+        </div>
+        <div class="contenido-login">
+            <form action="{{ url_for('login.login') }}" method="POST">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo">
+                <h2>Farmedic</h2>
+                {% if error %}
+                    <p style="color: red;">{{ error }}</p>
+                {% endif %}
+                <div class="input-div dni">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>DNI</h5>
+                        <input type="text" name="dni" class="input" required>
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Contraseña</h5>
+                        <input type="password" name="password" class="input" required>
+                    </div>
+                </div>
+                <a href="#">Created by Warpiece</a>
+                <input type="submit" class="btn" value="Iniciar Sesión">
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

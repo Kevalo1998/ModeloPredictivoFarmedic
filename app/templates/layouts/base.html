@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Farmedic{% endblock %}</title>
+
+  {% block styles %}
+    <!-- CSS global aquí o con includes -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sweetalert2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/compra.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datatables.css') }}">
+  {% endblock %}
+</head>
+<body class="hold-transition sidebar-mini">
+
+  <div class="wrapper">
+    {% include 'layouts/nav.html' %}
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    {% include 'layouts/footer.html' %}
+  </div>
+
+{% block scripts %}
+  <!-- jQuery (debe ir primero) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Bootstrap Bundle JS (incluye Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- AdminLTE JS -->
+  <script src="{{ url_for('static', filename='js/adminlte.min.js') }}"></script>
+
+  <!-- Otros JS -->
+  <script src="{{ url_for('static', filename='js/demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/sweetalert2.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/select2.js') }}"></script>
+{% endblock %}
+</body>
+</html>

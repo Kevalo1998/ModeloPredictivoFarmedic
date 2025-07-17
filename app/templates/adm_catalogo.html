@@ -1,0 +1,76 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Propietario | Catálogo{% endblock %}
+{% block content %}
+<div class="content-wrapper">
+  <!-- Content Header -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Catálogo</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ url_for('login.catalogo') }}">Home</a></li>
+            <li class="breadcrumb-item active">Vista catálogo</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Lotes en riesgo -->
+  <section>
+    <div class="container-fluid">
+      <div class="card card-danger">
+        <div class="card-header">
+          <h3 class="card-title">Lotes en riesgo</h3>
+        </div>
+        <div class="card-body p-0 table-responsive">
+          <table class="table table-hover text-nowrap">
+            <thead class="table-success">
+              <tr>
+                <th>Cod</th>
+                <th>Producto</th>
+                <th>Stock</th>
+                <th>Laboratorio</th>
+                <th>Presentación</th>
+                <th>Proveedor</th>
+                <th>Mes</th>
+                <th>Día</th>
+              </tr>
+            </thead>
+            <tbody id="lotes" class="table-active">
+              <!-- Render dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Buscar producto -->
+  <section>
+    <div class="container-fluid">
+      <div class="card card-success">
+        <div class="card-header">
+          <h3 class="card-title">Buscar Producto</h3>
+          <div class="input-group">
+            <input id="buscar-producto" type="text" class="form-control float-left" placeholder="Ingrese Nombre">
+            <div class="input-group-append">
+              <button class="btn btn-default"><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="productos" class="row d-flex align-items-stretch">
+            <!-- Productos dinámicos -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/catalogo.js') }}"></script>
+<script src="{{ url_for('static', filename='js/Carrito.js') }}"></script>
+{% endblock %}
