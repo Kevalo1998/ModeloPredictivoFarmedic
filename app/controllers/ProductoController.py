@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify, url_for, current_app
 from flask import Blueprint, render_template, session, redirect, url_for
+from flask import jsonify
+from app.db import get_db
 import os, time
 from app.models.producto import Producto
 producto_bp = Blueprint('producto', __name__)
@@ -104,3 +106,27 @@ def verificar_stock():
         if stock < p['cantidad'] or p['cantidad'] <= 0:
             error += 1
     return str(error)
+@producto_bp.route('/producto/info/<int:id>', methods=['GET'])
+def info_producto(id):
+    db = get_db()
+    cursor = db.cursor()
+
+    # Obtener stock actual desde el modelo si ya tienes método
+    stock_actual = producto_model.obtener_stock(id)
+
+    # Consultar ventas del mes actual
+    cursor.execute("""
+        SELECT SUM(dv.cantidad) AS ventas_mes
+        FROM detalle_venta dv
+        JOIN venta v ON dv.id_venta = v.id_venta
+        WHERE dv.id_producto = ? 
+        AND strftime('%m', v.fecha) = strftime('%m', 'now')
+        AND strftime('%Y', v.fecha) = strftime('%Y', 'now')
+    """, (id,))
+    row = cursor.fetchone()
+    ventas_mes = row['ventas_mes'] if row and row['ventas_mes'] else 0
+
+    return jsonify({
+        "stock_actual": stock_actual,
+        "ventas_mes": ventas_mes
+    })

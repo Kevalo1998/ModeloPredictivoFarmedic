@@ -1,7 +1,8 @@
 {% extends 'layouts/base.html' %}
+
 {% block content %}
 <div class="content-wrapper">
-  <!-- Content Header -->
+  <!-- Encabezado -->
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -11,23 +12,145 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ url_for('login.catalogo') }}">Home</a></li>
-            <li class="breadcrumb-item active">Vista catálogo</li>
+            <li class="breadcrumb-item active">Predicción</li>
           </ol>
         </div>
       </div>
     </div>
   </section>
-  <!-- Buscar producto -->
-  <section>
+
+  <!-- Predicción de productos -->
+  <section class="content">
     <div class="container-fluid">
+
       <div class="card card-success">
         <div class="card-header">
-          <h3 class="card-title">Predicción de productos</h3>
+          <h3 class="card-title">Opciones de Predicción</h3>
         </div>
         <div class="card-body">
+
+          <!-- Formulario de predicción -->
+          <form id="formPrediccion">
+            <div class="form-row">
+
+              <div class="form-group col-md-4">
+                <label>Producto</label>
+                <select class="form-control" id="producto_id" name="producto_id">
+                  <option value="">Seleccionar producto</option>
+                  {% for producto in productos %}
+                    <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <div class="form-group col-md-2">
+                <label>Stock Actual</label>
+                <input type="number" class="form-control" id="stock_actual" name="stock_actual" required>
+              </div>
+
+              <div class="form-group col-md-2">
+                <label>Ventas Último Mes</label>
+                <input type="number" class="form-control" id="ventas_mes" name="ventas_mes" required>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label>Tipo de Predicción</label>
+                <select class="form-control" id="tipo_prediccion" name="tipo_prediccion">
+                  <option value="dias_duracion">Tiempo de duración del stock</option>
+                  <option value="stock_minimo">Stock necesario para stock mínimo</option>
+                  <option value="ppi">Pedidos Insatisfechos (PPI)</option>
+                  <option value="tmr">Tiempo medio de reabastecimiento (TMR)</option>
+                  <option value="ncsm">Nivel de cobertura de stock mínimo (NCSM)</option>
+                  <option value="iod">Índice de desabastecimiento (IOD)</option>
+                </select>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-success mt-2">Predecir</button>
+          </form>
+
+          <!-- Resultado -->
+          <div class="mt-4" id="resultado_prediccion" style="display:none;">
+            <h5>Resultado:</h5>
+            <p id="texto_resultado"></p>
+          </div>
+
         </div>
       </div>
+
+      <!-- Historial -->
+      <div class="card card-outline card-secondary">
+        <div class="card-header">
+          <h3 class="card-title">Historial de Predicciones</h3>
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Tipo de predicción</th>
+                <th>Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for registro in historial %}
+              <tr>
+                <td>{{ registro.fecha }}</td>
+                <td>{{ registro.producto_nombre }}</td>
+                <td>{{ registro.tipo }}</td>
+                <td>{{ registro.resultado }}</td>
+              </tr>
+              {% endfor %}
+              {% if historial|length == 0 %}
+              <tr>
+                <td colspan="4" class="text-center">No hay predicciones registradas</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </section>
 </div>
+
+<!-- JS para mostrar resultado -->
+<script>
+document.getElementById('formPrediccion').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const data = {
+    producto_id: form.producto_id.value,
+    stock_actual: form.stock_actual.value,
+    ventas_mes: form.ventas_mes.value,
+    tipo_prediccion: form.tipo_prediccion.value
+  };
+
+  const response = await fetch('/prediccion/api', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  const result = await response.json();
+  document.getElementById('texto_resultado').innerText = result.mensaje;
+  document.getElementById('resultado_prediccion').style.display = 'block';
+});
+</script>
+<script>
+document.getElementById('producto_id').addEventListener('change', async function () {
+  const productoId = this.value;
+  if (!productoId) return;
+
+  const res = await fetch(`/producto/info/${productoId}`);
+  const data = await res.json();
+
+  document.getElementById('stock_actual').value = data.stock_actual || 0;
+  document.getElementById('ventas_mes').value = data.ventas_mes || 0;
+});
+</script>
 {% endblock %}
